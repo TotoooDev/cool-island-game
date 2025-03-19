@@ -15,10 +15,8 @@ function Interactable:getScript()
 end
 
 function Interactable:interact(oncomplete, config)
-    local cool_config = config or {}
-    cool_config.oncomplete = function ()
-        oncomplete()
-        self.isInteracting = false
+    if oncomplete == nil then
+        oncomplete = function () end
     end
 
     if not self.isInteracting then

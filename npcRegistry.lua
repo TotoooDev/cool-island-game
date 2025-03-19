@@ -2,23 +2,31 @@ local class = require "lib.hump.class"
 local Input = require "input"
 local TotoNPC = require "npcs.toto"
 local AnnieNPC = require "npcs.annie"
+local ShovelKnightNPC = require "npcs.shovelknight"
 
 local NPCRegistry = class({
     interactionRange = 100.0,
     interactedNpc = nil
 })
 
-function NPCRegistry:init(player)
+function NPCRegistry:init(player, location)
     self.player = player
     self.npcs = {
         TotoNPC(),
-        AnnieNPC()
+        AnnieNPC(),
+        ShovelKnightNPC(player)
     }
+    self.activeNpcs = {}
+    for _, npc in ipairs(self.npcs) do
+        if npc.location == location then
+            table.insert(self.activeNpcs, npc)
+        end
+    end
 end
 
 function NPCRegistry:update(dt)
     self.interactedNpc = nil
-    for _, npc in ipairs(self.npcs) do
+    for _, npc in ipairs(self.activeNpcs) do
         if npc.pos:dist(self.player.pos) < self.interactionRange then
             self.interactedNpc = npc
             break
@@ -27,7 +35,7 @@ function NPCRegistry:update(dt)
 end
 
 function NPCRegistry:draw()
-    for _, npc in ipairs(self.npcs) do
+    for _, npc in ipairs(self.activeNpcs) do
         npc:draw()
     end
 

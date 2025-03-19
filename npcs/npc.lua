@@ -8,9 +8,11 @@ local NPC = class({
 })
 
 -- TODO: add an image for dialogues
-function NPC:init(pos, size)
-    Sprite.init(self, pos, size)
+function NPC:init(pos, size, location, image)
+    Sprite.init(self, pos, size, image)
     Interactable.init(self)
+
+    self.location = location
 end
 
 return NPC

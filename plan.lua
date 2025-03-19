@@ -1,6 +1,7 @@
 local class = require "lib.hump.class"
 local Timer = require "lib.hump.timer"
 local Vector = require "lib.hump.vector"
+local TextureRegistry = require "textureRegistry"
 local Input = require "input"
 
 local Plan = class({
@@ -16,7 +17,7 @@ function Plan:init(player)
     local windowHeight = love.graphics.getHeight()
     self.pos = Vector(0.0, windowHeight)
     self.player = player
-    self.mapImage = love.graphics.newImage("assets/images/map.bmp");
+    self.mapImage = TextureRegistry.plan;
 end
 
 function Plan:show()
@@ -73,18 +74,16 @@ function Plan:draw()
         return
     end
 
-    love.graphics.setColor({ 1.0, 0.0, 0.0 })
-
-    love.graphics.rectangle(
-        "fill",
-        self.pos.x,
-        self.pos.y,
-        love.graphics.getWidth(),
-        love.graphics.getHeight()
-    )
     love.graphics.setColor({ 1.0, 1.0, 1.0 })
 
-    love.graphics.draw(self.mapImage, self.pos.x, self.pos.y)
+    love.graphics.draw(
+        self.mapImage,
+        self.pos.x,
+        self.pos.y,
+        0,
+        love.graphics.getWidth() / self.mapImage:getWidth(),
+        love.graphics.getHeight() / self.mapImage:getHeight()
+    )
 
     -- love.graphics.draw(
     --     self.player.image,
@@ -94,16 +93,6 @@ function Plan:draw()
     --     4 / self.player.size.x,
     --     4 / self.player.size.y
     -- )
-    love.graphics.draw(
-        self.player.image,
-        self.map + self.pos.x,
-        self.player.pos.y + self.pos.y,
-        0,
-        4 / self.player.size.x,
-        4 / self.player.size.y
-    )
-
-    love.graphics.setColor({ 1.0, 1.0, 1.0 })
 end
 
 return Plan
